@@ -3,6 +3,16 @@ import { ParamKeyValuePair, useSearchParams } from "react-router-dom";
 import { Timer } from "./Timer";
 import { timer } from "./utils";
 
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+function shuffleArray(inputArray: [string, string][]): [string, string][] {
+  const array = [...inputArray]
+  for (let i = array.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array
+}
+
 export function App(): React.ReactElement {
   const [timers, setTimers] = useState<timer[]>([]);
   let [searchParams, setSearchParams] = useSearchParams();
@@ -13,7 +23,7 @@ export function App(): React.ReactElement {
     try {
       const qsTimers = [...searchParams];
       setTimers(
-        qsTimers.map((timer) => ({ time: parseInt(timer[1]), name: timer[0] }))
+        shuffleArray(qsTimers).map((timer) => ({ time: parseInt(timer[1]), name: timer[0] }))
       );
     } catch (e) {
       setTimers([]);
